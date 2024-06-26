@@ -1,0 +1,64 @@
+openapi: 3.0.2
+info:
+  title: Inventory Service
+  version: 1.0
+  description: API definition of Inventory Service
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+paths:
+  /api/inventory/{code}:
+    get:
+      parameters:
+        - name: code
+          description: product code
+          schema:
+            type: string
+          in: path
+          required: true
+          examples:
+            P101:
+              value: P101
+            P102:
+              value: P102
+            P103:
+              value: P103
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+              examples:
+                P101:
+                  value:
+                    code: P101
+                    quantity: 25
+                P103:
+                  value:
+                    code: P103
+                    quantity: 0
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                P102:
+                  value: ""
+components:
+  schemas:
+    Product:
+      title: Root Type for Product
+      type: object
+      properties:
+        code:
+          description: Code of this product
+          type: string
+        quantity:
+          description: Remaining quantity for this product
+          type: number
+      required:
+        - code
+        - quantity
+      additionalProperties: false
