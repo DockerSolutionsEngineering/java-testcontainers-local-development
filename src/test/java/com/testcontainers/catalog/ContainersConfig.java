@@ -16,11 +16,11 @@ import org.testcontainers.containers.localstack.LocalStackContainer;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class ContainersConfig {
-//    @Bean
-//    @ServiceConnection
-//    PostgreSQLContainer<?> postgresContainer() {
-//        return new PostgreSQLContainer<>(parse("postgres:16-alpine")).withReuse(false);
-//    }
+    //    @Bean
+    //    @ServiceConnection
+    //    PostgreSQLContainer<?> postgresContainer() {
+    //        return new PostgreSQLContainer<>(parse("postgres:16-alpine")).withReuse(false);
+    //    }
 
     @Bean
     @ServiceConnection
@@ -34,7 +34,6 @@ public class ContainersConfig {
         MySQLContainer<?> mySQL = new MySQLContainer<>(parse("mysql:8.0.30"));
         return mySQL;
     }
-
 
     @Bean("localstackContainer")
     LocalStackContainer localstackContainer(DynamicPropertyRegistry registry) {

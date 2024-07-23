@@ -1,18 +1,19 @@
 package com.testcontainers.catalog.ui;
 
+import java.io.File;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testcontainers.containers.BrowserWebDriverContainer;
 import org.testcontainers.junit.jupiter.Container;
 
-import java.io.File;
-
 public class SeleniumExampleTest {
     @Container
     private static final BrowserWebDriverContainer chrome = new BrowserWebDriverContainer()
             .withCapabilities(new ChromeOptions())
-            .withRecordingMode(BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL, new File("/Users/annachernysheva/Work/Docker/java-testcontainers-local-development/target"));
+            .withRecordingMode(
+                    BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL,
+                    new File("/Users/annachernysheva/Work/Docker/java-testcontainers-local-development/target"));
 
     @Test
     public void simplePlainSeleniumTest() {
@@ -22,5 +23,4 @@ public class SeleniumExampleTest {
         driver.get("https://testcontainers.com/");
         assert "Testcontainers".equals(driver.getTitle());
     }
-
 }
