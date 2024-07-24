@@ -16,11 +16,6 @@ import org.testcontainers.containers.localstack.LocalStackContainer;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class ContainersConfig {
-    //    @Bean
-    //    @ServiceConnection
-    //    PostgreSQLContainer<?> postgresContainer() {
-    //        return new PostgreSQLContainer<>(parse("postgres:16-alpine")).withReuse(false);
-    //    }
 
     @Bean
     @ServiceConnection
