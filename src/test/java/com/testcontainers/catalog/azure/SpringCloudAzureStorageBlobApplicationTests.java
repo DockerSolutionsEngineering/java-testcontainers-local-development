@@ -32,6 +32,7 @@ class SpringCloudAzureStorageBlobApplicationTests extends BaseIntegrationTest {
 
     @DynamicPropertySource
     static void properties(DynamicPropertyRegistry registry) {
+        System.out.println("azurite.getHost() = " + azurite.getHost());
         var azuriteHost = azurite.getHost();
         var azuriteBlobMappedPort = azurite.getMappedPort(AZURE_STORAGE_BLOB_PORT);
         var connectionString =
