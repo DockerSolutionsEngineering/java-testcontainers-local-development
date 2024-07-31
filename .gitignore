@@ -17,6 +17,10 @@ target/
 *.iws
 *.iml
 *.ipr
+mutagen-daemon.log
+tcc-agent.log
+tcc-agent
+.devcontainer/devcontainer.env
 
 ### NetBeans ###
 /nbproject/private/
