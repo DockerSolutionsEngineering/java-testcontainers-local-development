@@ -19,7 +19,8 @@ public class ContainersConfig {
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> postgresContainer() {
-        return new PostgreSQLContainer<>(parse("postgres:16-alpine"));
+        return new PostgreSQLContainer<>(parse("postgres:16-alpine"))
+                .withReuse(false);
     }
 
     @Bean
