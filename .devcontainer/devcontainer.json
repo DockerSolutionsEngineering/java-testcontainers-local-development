@@ -1,11 +1,25 @@
 {
-	"name": "idea-demo",
+	"name": "Java testcontainers local development",
 	"image": "mcr.microsoft.com/devcontainers/java:21",
 	"runArgs": ["--env-file","/Users/annachernysheva/Work/Docker/java-testcontainers-local-development/.devcontainer/devcontainer.env"],
 	"containerEnv": {
 		"TC_CLOUD_TOKEN": "${localEnv:TC_CLOUD_TOKEN}",
+		"TCC_PROJECT_KEY": "Java_testcontainers_local_development"
 	},
-	"postStartCommand": "bash ./install-tcc-agent.sh"
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2": {},
+		"ghcr.io/devcontainers/features/java:1": {
+			"version": "none",
+			"installMaven": "true",
+			"installGradle": "false"
+		},
+		// Download and install the TCC agent.
+		"ghcr.io/eddumelendez/test-devcontainer/tcc:0.0.2": {}
+	},
+	// Add a postAttachCommand to start the TCC agent.
+	"postAttachCommand": "nohup /usr/local/share/tcc-agent &"
 }
 
 
