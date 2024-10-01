@@ -13,6 +13,7 @@ import org.springframework.test.context.jdbc.Sql;
 public class ProductControllerTestNegative extends BaseIntegrationTest {
     @Test
     void doesNotCreateProductIfProductCodeExists() {
+        //Added comment to test the pipeline
         String code = UUID.randomUUID().toString();
         given().contentType(ContentType.JSON)
                 .body(
