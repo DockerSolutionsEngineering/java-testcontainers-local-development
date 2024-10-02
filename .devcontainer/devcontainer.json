@@ -1,7 +1,7 @@
 {
 	"name": "Java testcontainers local development",
-	"image": "mcr.microsoft.com/devcontainers/java:21",
-	"runArgs": ["--env-file",".devcontainer/devcontainer.env"],
+	"image": "mcr.microsoft.com/devcontainers/java:0-17",
+//	"runArgs": ["--env-file",".devcontainer/devcontainer.env"],
 	"containerEnv": {
 		"JAVA_HOME": "/usr/lib/jvm/msopenjdk-current",
 		"TC_CLOUD_TOKEN": "${localEnv:TC_CLOUD_TOKEN}",
