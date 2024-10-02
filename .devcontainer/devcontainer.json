@@ -3,6 +3,7 @@
 	"image": "mcr.microsoft.com/devcontainers/java:21",
 	"runArgs": ["--env-file",".devcontainer/devcontainer.env"],
 	"containerEnv": {
+		"JAVA_HOME": "/usr/lib/jvm/msopenjdk-current",
 		"TC_CLOUD_TOKEN": "${localEnv:TC_CLOUD_TOKEN}",
 		"TCC_PROJECT_KEY": "Java_testcontainers_local_development"
 	},
