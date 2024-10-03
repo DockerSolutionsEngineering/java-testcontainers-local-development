@@ -70,7 +70,7 @@
 
                 productElement.innerHTML = `
                     <h3>${product.name}</h3>
-                    <img src="${product.imageUrl}" alt="${product.name}">
+                    <img src="${product.imageUrl || '/P101.jpg'}" alt="${product.name}">
                     <p>Description: ${product.description}</p>
                     <p>Price: $${product.price}</p>
                     <p>Available: ${product.available ? "Yes" : "No"}</p>
