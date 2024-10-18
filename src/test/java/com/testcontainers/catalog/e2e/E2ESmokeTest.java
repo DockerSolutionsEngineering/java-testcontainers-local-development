@@ -1,6 +1,9 @@
 package com.testcontainers.catalog.e2e;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.testcontainers.catalog.BaseIntegrationTest;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -15,10 +18,6 @@ import org.testcontainers.Testcontainers;
 import org.testcontainers.containers.BrowserWebDriverContainer;
 import org.testcontainers.junit.jupiter.Container;
 
-import java.util.concurrent.TimeUnit;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 @ContextConfiguration(initializers = E2ESmokeTest.Initializer.class)
 public class E2ESmokeTest extends BaseIntegrationTest {
 
@@ -26,9 +25,8 @@ public class E2ESmokeTest extends BaseIntegrationTest {
     private int port;
 
     @Container
-    public BrowserWebDriverContainer<?> firefox = new BrowserWebDriverContainer<>()
-            .withCapabilities(new FirefoxOptions());
-
+    public BrowserWebDriverContainer<?> firefox =
+            new BrowserWebDriverContainer<>().withCapabilities(new FirefoxOptions());
 
     @Test
     void shouldVerifyProductsAreVisibleOnThePage() {
@@ -37,7 +35,8 @@ public class E2ESmokeTest extends BaseIntegrationTest {
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.get("http://host.testcontainers.internal:" + port);
         driver.findElement(By.id("product-list")).isDisplayed();
-        int numberOfProductsAvailable = driver.findElements(By.className("product")).size();
+        int numberOfProductsAvailable =
+                driver.findElements(By.className("product")).size();
         assertThat(numberOfProductsAvailable).isEqualTo(3);
     }
 
@@ -45,11 +44,9 @@ public class E2ESmokeTest extends BaseIntegrationTest {
 
         @Override
         public void initialize(ConfigurableApplicationContext applicationContext) {
-            applicationContext.addApplicationListener(
-                    (ApplicationListener<WebServerInitializedEvent>) event -> {
-                        Testcontainers.exposeHostPorts(event.getWebServer().getPort());
-                    }
-            );
+            applicationContext.addApplicationListener((ApplicationListener<WebServerInitializedEvent>) event -> {
+                Testcontainers.exposeHostPorts(event.getWebServer().getPort());
+            });
         }
     }
 }

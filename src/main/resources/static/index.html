@@ -60,6 +60,7 @@
         async function fetchProducts() {
             const response = await fetch('/api/data');
             const products = await response.json();
+            products.sort((a, b) => a.name.localeCompare(b.name));
 
             const productListElement = document.getElementById("product-list");
             productListElement.innerHTML = "";
@@ -70,12 +71,13 @@
 
                 productElement.innerHTML = `
                     <h3>${product.name}</h3>
-                    <img src="${product.imageUrl || '/P101.jpg'}" alt="${product.name}">
+                    <img id="product-img-${product.code}" src="${product.imageUrl || '/P101.jpg'}" alt="${product.name}">
                     <p>Description: ${product.description}</p>
                     <p>Price: $${product.price}</p>
                     <p>Available: ${product.available ? "Yes" : "No"}</p>
                     <input type="file" id="upload-${product.code}" style="display: none;" onchange="uploadImage('${product.code}')">
-                    <button class="upload-button" onclick="document.getElementById('upload-${product.code}').click()">Upload Image</button>
+                    <input type="text" id="url-${product.code}" placeholder="Image URL" oninput="disableFileInput('${product.code}')">
+                    <button class="upload-button" onclick="uploadImage('${product.code}')">Upload Image</button>
                 `;
 
                 productListElement.appendChild(productElement);
@@ -122,33 +124,55 @@
         }
 
         // Handle the image upload logic
+        // Function to handle image upload
         async function uploadImage(productCode) {
             const fileInput = document.getElementById(`upload-${productCode}`);
+            const urlInput = document.getElementById(`url-${productCode}`);
             const file = fileInput.files[0];
+            const imageUrl = urlInput.value;
+
+            const formData = new FormData();
 
             if (file) {
-                const formData = new FormData();
                 formData.append("file", file);
+            } else if (imageUrl) {
+                formData.append("imageUrl", imageUrl);
+            } else {
+                alert("Please select a file or provide an image URL.");
+                return;
+            }
 
-                try {
-                    const response = await fetch(`/api/products/${productCode}/image`, {
-                        method: "POST",
-                        body: formData
-                    });
+            try {
+                const response = await fetch(`/api/products/${productCode}/image`, {
+                    method: "POST",
+                    body: formData
+                });
 
-                    const result = await response.json();
-                    if (result.status === "success") {
-                        alert("Image uploaded successfully: " + result.filename);
-                        fetchProducts();  // Re-fetch products to display updated images
-                    } else {
-                        alert("Failed to upload image.");
-                    }
-                } catch (error) {
-                    console.error("Error uploading image:", error);
-                    alert("Error uploading image.");
+                const result = await response.json();
+                if (result.status === "success") {
+                    alert("Image uploaded successfully: " + result.filename);
+                    fetchProducts();  // Re-fetch products to display updated images
+                } else {
+                    alert("Failed to upload image.");
                 }
+            } catch (error) {
+                console.error("Error uploading image:", error);
+                alert("Error uploading image.");
             }
         }
+
+
+        function disableFileInput(productCode) {
+            const fileInput = document.getElementById(`upload-${productCode}`);
+            const urlInput = document.getElementById(`url-${productCode}`);
+
+            if (urlInput.value) {
+                fileInput.disabled = true;
+            } else {
+                fileInput.disabled = false;
+            }
+        }
+
 
         window.onload = fetchProducts;
     </script>
