@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -45,6 +46,12 @@ class ProductController {
     ResponseEntity<Product> getProductByCode(@PathVariable String code) {
         var product = productService.getProductByCode(code).orElseThrow(() -> ProductNotFoundException.withCode(code));
         return ResponseEntity.ok(product);
+    }
+
+    @GetMapping("/all")
+    ResponseEntity<List<Product>> getAllProducts() {
+        List<Product> products = productService.getAllProducts();
+        return ResponseEntity.ok(products);
     }
 
     @PostMapping("/{code}/image")

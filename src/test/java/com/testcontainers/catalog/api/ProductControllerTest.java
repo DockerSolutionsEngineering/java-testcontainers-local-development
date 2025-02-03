@@ -15,11 +15,13 @@ import io.github.microcks.testcontainers.model.TestRequest;
 import io.github.microcks.testcontainers.model.TestResult;
 import io.github.microcks.testcontainers.model.TestRunnerType;
 import io.restassured.RestAssured;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -100,6 +102,20 @@ class ProductControllerTest extends BaseIntegrationTest {
         assertThat(product.description()).isEqualTo("Product %s description".formatted(code));
         assertThat(product.price().compareTo(new BigDecimal("34.0"))).isEqualTo(0);
         assertThat(product.available()).isTrue();
+    }
+
+    @Test
+    void getAllProducts() {
+        List <Product> products = given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/products/all")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(new TypeRef<List<Product>>() {});
+
+        assertThat(products.size()).isEqualTo(3);
     }
 
     @Test
