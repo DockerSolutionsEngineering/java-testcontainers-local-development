@@ -22,8 +22,7 @@ class ProductServiceTest {
 
     @Container
     static PostgreSQLContainer postgres =
-            new PostgreSQLContainer<>(parse("postgres:16-alpine"))
-                    .withInitScript("init-test-data.sql");
+            new PostgreSQLContainer<>(parse("postgres:16-alpine")).withInitScript("init-test-data.sql");
 
     @DynamicPropertySource
     static void setUp(DynamicPropertyRegistry registry) {
