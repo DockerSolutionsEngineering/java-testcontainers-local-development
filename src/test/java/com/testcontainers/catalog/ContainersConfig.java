@@ -1,4 +1,5 @@
 package com.testcontainers.catalog;
+
 import static org.testcontainers.utility.DockerImageName.parse;
 
 import com.testcontainers.catalog.domain.FileStorageService;
@@ -49,7 +50,6 @@ public class ContainersConfig {
         return args -> fileStorageService.createBucket(properties.productImagesBucketName());
     }
 
-
     @Bean("microcksContainer")
     MicrocksContainer microcksContainer() {
         return new MicrocksContainer("quay.io/microcks/microcks-uber:1.12.0")
@@ -57,12 +57,12 @@ public class ContainersConfig {
                 .withAccessToHost(true);
     }
 
-
     @Bean
     DynamicPropertyRegistrar microcksContainerRegistrar(MicrocksContainer microcks) {
         return registry -> {
             registry.add(
-                    "application.inventory-service-url", () -> microcks.getRestMockEndpoint("Inventory Service", "1.0"));
+                    "application.inventory-service-url",
+                    () -> microcks.getRestMockEndpoint("Inventory Service", "1.0"));
         };
     }
 }
