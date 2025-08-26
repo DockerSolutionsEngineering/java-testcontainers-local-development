@@ -1,5 +1,4 @@
 package com.testcontainers.catalog;
-
 import static org.testcontainers.utility.DockerImageName.parse;
 
 import com.testcontainers.catalog.domain.FileStorageService;
@@ -9,10 +8,11 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.testcontainers.containers.KafkaContainer;
+import org.springframework.test.context.DynamicPropertyRegistrar;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.kafka.KafkaContainer;
+import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class ContainersConfig {
@@ -25,17 +25,22 @@ public class ContainersConfig {
     @Bean
     @ServiceConnection
     KafkaContainer kafkaContainer() {
-        return new KafkaContainer(parse("confluentinc/cp-kafka:7.9.1"));
+        return new KafkaContainer(DockerImageName.parse("apache/kafka-native:latest"));
     }
 
     @Bean("localstackContainer")
-    LocalStackContainer localstackContainer(DynamicPropertyRegistry registry) {
-        LocalStackContainer localStack = new LocalStackContainer(parse("localstack/localstack:4.5.0"));
-        registry.add("spring.cloud.aws.credentials.access-key", localStack::getAccessKey);
-        registry.add("spring.cloud.aws.credentials.secret-key", localStack::getSecretKey);
-        registry.add("spring.cloud.aws.region.static", localStack::getRegion);
-        registry.add("spring.cloud.aws.endpoint", localStack::getEndpoint);
-        return localStack;
+    LocalStackContainer localstackContainer() {
+        return new LocalStackContainer(DockerImageName.parse("localstack/localstack:4.5.0"));
+    }
+
+    @Bean
+    DynamicPropertyRegistrar localstackContainerRegistrar(LocalStackContainer localStack) {
+        return registry -> {
+            registry.add("spring.cloud.aws.credentials.access-key", localStack::getAccessKey);
+            registry.add("spring.cloud.aws.credentials.secret-key", localStack::getSecretKey);
+            registry.add("spring.cloud.aws.region.static", localStack::getRegion);
+            registry.add("spring.cloud.aws.endpoint", localStack::getEndpoint);
+        };
     }
 
     @Bean
@@ -44,15 +49,20 @@ public class ContainersConfig {
         return args -> fileStorageService.createBucket(properties.productImagesBucketName());
     }
 
-    @Bean
-    MicrocksContainer microcksContainer(DynamicPropertyRegistry registry) {
-        MicrocksContainer microcks = new MicrocksContainer("quay.io/microcks/microcks-uber:1.12.0")
+
+    @Bean("microcksContainer")
+    MicrocksContainer microcksContainer() {
+        return new MicrocksContainer("quay.io/microcks/microcks-uber:1.12.0")
                 .withMainArtifacts("inventory-openapi.yaml")
                 .withAccessToHost(true);
+    }
 
-        registry.add(
-                "application.inventory-service-url", () -> microcks.getRestMockEndpoint("Inventory Service", "1.0"));
 
-        return microcks;
+    @Bean
+    DynamicPropertyRegistrar microcksContainerRegistrar(MicrocksContainer microcks) {
+        return registry -> {
+            registry.add(
+                    "application.inventory-service-url", () -> microcks.getRestMockEndpoint("Inventory Service", "1.0"));
+        };
     }
 }
