@@ -62,7 +62,6 @@ class ProductControllerTest extends BaseIntegrationTest {
     void shouldUploadProductImageSuccessfully() throws IOException {
         String code = "P101";
         File file = new ClassPathResource("P101.jpg").getFile();
-
         Optional<Product> product = productService.getProductByCode(code);
         assertThat(product).isPresent();
         assertThat(product.get().imageUrl()).isNull();
