@@ -5,7 +5,39 @@ This repo will demo how to use Testcontainers \([https://www.testcontainers.com]
 We will explore a Spring Boot application and show how to:
 * Use Testcontainers for provisioning application dependent services like PostgreSQL, Kafka, LocalStack for local development
 * Use [Testcontainers Desktop](https://testcontainers.com/desktop/) for local development and debugging
-* Use Testcontainers Cloud as a contaner runtime for local development and CI workflows
+* Use Testcontainers Cloud as a container runtime for local development and CI workflows
+
+## Testcontainers Demo Examples
+
+This project demonstrates various Testcontainers patterns through several key examples:
+
+### 1. Basic Container Management (RunMe.java)
+The `RunMe` class demonstrates the fundamental Testcontainers concepts:
+- **Random Port Assignment**: Shows how Testcontainers automatically assigns random ports to avoid conflicts
+- **Programmatic API**: Demonstrates the Java API for container lifecycle management
+- **Dynamic Configuration**: Illustrates how to retrieve connection details at runtime
+
+### 2. Integration Testing with Database (ProductServiceTest.java) 
+This test class shows how to:
+- Connect your application under development to database containers
+- Use `@DynamicPropertySource` to configure Spring Boot with container connection details
+- Perform integration testing against a real PostgreSQL database
+
+### 3. Shared Testing Configuration
+- **ContainersConfig**: Contains shared configuration for the Testcontainers-based testing environment
+- **BaseIntegrationTest**: Provides base setup for integration tests, including:
+  - Spring Boot test configuration with random ports
+  - RestAssured setup for API testing
+  - Testcontainers host port exposure
+
+### 4. Advanced Test Scenarios (api/ package)
+The `api/` package contains more sophisticated testing scenarios:
+- **ProductControllerTest**: Full integration tests with multiple services (database, messaging, file storage)
+- **API Contract Testing**: OpenAPI schema validation using Microcks
+- **File Upload Testing**: Demonstrates testing file operations with LocalStack S3
+- **Asynchronous Testing**: Shows testing of Kafka message publishing
+
+These examples progressively demonstrate Testcontainers capabilities from basic container management to complex multi-service integration testing.
 
 ## Running the app
 1. Clone project or start a codespace workspace on the demo-state branch 
