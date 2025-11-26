@@ -49,5 +49,6 @@
             }
         }
     },
+    "postCreateCommand": "sudo chown -R vscode:vscode /home/vscode/.m2",
     "postStartCommand": "java -version && mvn -version"
 }
