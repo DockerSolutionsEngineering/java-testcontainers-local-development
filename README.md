@@ -2,10 +2,73 @@
 
 This repo will demo how to use Testcontainers \([https://www.testcontainers.com](https://www.testcontainers.com)\) in your Java application development process.
 
-We will work with a Spring Boot application and show how to:
+We will explore a Spring Boot application and show how to:
 * Use Testcontainers for provisioning application dependent services like PostgreSQL, Kafka, LocalStack for local development
 * Use [Testcontainers Desktop](https://testcontainers.com/desktop/) for local development and debugging
-* Write tests using Testcontainers
+* Use Testcontainers Cloud as a container runtime for local development and CI workflows
+
+## Testcontainers Demo Examples
+
+This project demonstrates various Testcontainers patterns through several key examples:
+
+### 1. Basic Container Management (RunMe.java)
+The `RunMe` class demonstrates the fundamental Testcontainers concepts:
+- **Random Port Assignment**: Shows how Testcontainers automatically assigns random ports to avoid conflicts
+- **Programmatic API**: Demonstrates the Java API for container lifecycle management
+- **Dynamic Configuration**: Illustrates how to retrieve connection details at runtime
+
+### 2. Integration Testing with Database (ProductServiceTest.java) 
+This test class shows how to:
+- Connect your application under development to database containers
+- Use `@DynamicPropertySource` to configure Spring Boot with container connection details
+- Perform integration testing against a real PostgreSQL database
+
+### 3. Shared Testing Configuration
+- **ContainersConfig**: Contains shared configuration for the Testcontainers-based testing environment
+- **BaseIntegrationTest**: Provides base setup for integration tests, including:
+  - Spring Boot test configuration with random ports
+  - RestAssured setup for API testing
+  - Testcontainers host port exposure
+
+### 4. Advanced Test Scenarios (api/ package)
+The `api/` package contains more sophisticated testing scenarios:
+- **ProductControllerTest**: Full integration tests with multiple services (database, messaging, file storage)
+- **API Contract Testing**: OpenAPI schema validation using Microcks
+- **File Upload Testing**: Demonstrates testing file operations with LocalStack S3
+- **Asynchronous Testing**: Shows testing of Kafka message publishing
+
+These examples progressively demonstrate Testcontainers capabilities from basic container management to complex multi-service integration testing.
+
+## Running the app
+1. Clone project or start a codespace workspace on the demo-state branch 
+2. To demo the local development use case run the application locally letting Spring Boot and Testcontainers set up a containers for it: `./mvnw spring-boot:test-run`
+3. Open the application in the browser: [link](http://localhost:8080/)
+4. Explore the UI, add product. The application runs on the codespaces VM instance with a Postgres, Kafka, LocalStack and Mock of Inventory Service containers on TCC.
+5. Open [Testcontainers Cloud dashboard](https://app.testcontainers.cloud/dashboard) and see the contaners created for the application
+6. Highligt that you can [tag Project (Java_testcontainers_local_development) and Account (TCC_SOLENG_CODESPACES)](https://testcontainers.com/cloud/docs/#tag-test-sessions-by-project). In this example via env variables in the devcontainer.js 
+```shell
+"containerEnv": {
+    "TC_CLOUD_TOKEN": "${localEnv:TC_CLOUD_TOKEN}",
+    "TCC_PROJECT_KEY": "Java_testcontainers_local_development"
+  }
+``` 
+7. Connect to the cloud worker ![img.png](img.png)
+8. Do `docker ps` and see containers running
+* Optional: 
+* get into postgers container `docker exec -it mypostgrescontainer sh` 
+* login to postgres db `psql -h localhost -p 5432 -U test -d test`
+* list tables `\dt`, or any other sql command, like list all products 
+```sql
+select * from test.public.products;
+```
+* `exit` container
+9. Go back to the codespase and stop the application by `Ctr+C` in the terminal
+10. Run application tests by `./mvnw clean test`
+11. Go to the [Testcontainers Cloud dashboard](https://app.testcontainers.cloud/dashboard), explore containers started for the tests and then exited
+12. Tell about Service accounts and how to [run Testcontainers test in CI with Testcontainers Cloud](https://www.testcontainers.cloud/ci)
+13. Make a small change in the project, commit and push changes. Adding a comment is good enough.
+14. Go to the latest [GHA build](https://github.com/DockerSolutionsEngineering/java-testcontainers-local-development/actions), rerun the job, and see CI build with the proper Project, Workflow, and Service account ![img_1.png](img_1.png)
+15. *Highlight Private registries and [show how to use them with Testcontainers Cloud](https://app.testcontainers.cloud/dashboard/settings)
 
 ## Exploring the app
 
