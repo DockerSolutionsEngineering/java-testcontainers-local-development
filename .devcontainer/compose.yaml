@@ -1,0 +1,18 @@
+services:
+  app-workspace:
+    image: mcr.microsoft.com/devcontainers/java:1-21-bookworm
+    network_mode: host
+    privileged: true
+    volumes:
+      - ..:/workspaces/${localWorkspaceFolderBasename}:cached
+      - maven-cache:/home/vscode/.m2
+      - /var/run/docker.sock:/var/run/docker.sock  # Direct socket access
+    command: sleep infinity
+    environment:
+      TESTCONTAINERS_HOST_OVERRIDE: localhost
+      TESTCONTAINERS_RYUK_CONTAINER_PRIVILEGED: true
+      MAVEN_OPTS: -Xmx1024m -Xms256m
+      JAVA_HOME: /usr/local/sdkman/candidates/java/current
+
+volumes:
+  maven-cache:

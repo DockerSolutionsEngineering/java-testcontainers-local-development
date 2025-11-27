@@ -1,6 +1,12 @@
 {
     "name": "Java Dev Container TCC Demo",
-    "image": "mcr.microsoft.com/devcontainers/java:1-21-bookworm",
+    "dockerComposeFile": [
+        "../compose.yaml",
+        "compose.yaml"
+    ],
+    "service": "app-workspace",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    // Remove forwardPorts since you're using host networking
     "features": {
         "ghcr.io/devcontainers/features/java:1": {
             "version": "21",
@@ -8,9 +14,10 @@
             "mavenVersion": "3.9",
             "installGradle": "false"
         },
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+            "installDockerBuildx": true,
+            "installDockerComposeSwitch": true,
             "version": "latest",
-            "moby": true,
             "dockerDashComposeVersion": "v2"
         },
         "ghcr.io/devcontainers/features/git:1": {},
@@ -20,19 +27,8 @@
         "MAVEN_OPTS": "-Xmx1024m -Xms256m",
         "JAVA_HOME": "/usr/local/sdkman/candidates/java/current"
     },
-    "mounts": [
-        "source=maven-cache-${localWorkspaceFolderBasename},target=/home/vscode/.m2,type=volume"
-    ],
-    "forwardPorts": [
-        8080,
-        5005
-    ],
     "customizations": {
         "vscode": {
-            "settings": {
-                "workbench.colorTheme": "GitHub Dark",
-                "spring.initializr.defaultLanguage": "Java"
-            },
             "extensions": [
                 "vscjava.vscode-java-pack",
                 "vscjava.vscode-spring-boot-dashboard",
@@ -43,6 +39,9 @@
                 "ms-azuretools.vscode-docker"
             ],
             "settings": {
+                "workbench.colorTheme": "GitHub Dark",
+                "spring.initializr.defaultLanguage": "Java",
+                "remote.autoForwardPorts": false,
                 "java.configuration.updateBuildConfiguration": "automatic",
                 "java.saveActions.organizeImports": true,
                 "editor.formatOnSave": true
