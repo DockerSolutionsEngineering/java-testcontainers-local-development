@@ -17,7 +17,6 @@ FROM eclipse-temurin:21 AS runtime
 #FROM demonstrationorg/dhi-eclipse-temurin:21.0 AS runtime
 WORKDIR /app
 COPY --from=builder /app/target/*.jar /app/app.jar
-USER nonroot
 # Expose port 8080 
 EXPOSE 8080
 
