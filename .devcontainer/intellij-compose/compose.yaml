@@ -9,8 +9,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock  # Direct socket access
     command: sleep infinity
     environment:
-      TESTCONTAINERS_HOST_OVERRIDE: localhost
-      TESTCONTAINERS_RYUK_CONTAINER_PRIVILEGED: true
       MAVEN_OPTS: -Xmx1024m -Xms256m
       JAVA_HOME: /usr/local/sdkman/candidates/java/current
 
