@@ -46,9 +46,15 @@
         "java.saveActions.organizeImports": true,
         "editor.formatOnSave": true
       }
+    },
+    "jetbrains": {
+      "backend": "IntelliJ"
     }
   },
-  "forwardPorts": [8080, 5005],
+  "forwardPorts": [
+    8080,
+    5005
+  ],
   "runArgs": [
     "--network=app-network",
     "--publish=8080:8080"
